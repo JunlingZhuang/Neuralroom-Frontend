@@ -12,6 +12,12 @@ import OutputBox from "./components/outputbox.js";
 import RangeControl from "./components/rangecontrol.js";
 
 function App() {
+  const [modelUrl, setModelUrl] = useState("");
+  const handleModelChange = (modelName) => {
+    setModelUrl(`http://127.0.0.1:5000/models/${modelName}.fbx`);
+  };
+
+  // set the initial size of the input box
   const [boxSize, setBoxSize] = useState({ x: 1, y: 1, z: 1 });
 
   const handleSizeChangeX = (newValue) => {
@@ -62,12 +68,27 @@ function App() {
             <Col className="output-col-right" md={6} lg={6} xl={6} xxl={6}>
               <Stack gap={3}>
                 <div className="output-box-canvas">
-                  <OutputBox boxSize={boxSize} />
+                  <OutputBox modelUrl={modelUrl} />
                 </div>
                 <Stack gap={3} className="output-control-container">
-                  <Button variant="primary">Case1</Button>
-                  <Button variant="primary">Case2</Button>
-                  <Button variant="primary">Case3</Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => handleModelChange("case1")}
+                  >
+                    Case1
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => handleModelChange("case2")}
+                  >
+                    Case2
+                  </Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => handleModelChange("case3")}
+                  >
+                    Case3
+                  </Button>
                 </Stack>
               </Stack>
             </Col>

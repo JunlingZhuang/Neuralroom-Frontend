@@ -1,11 +1,20 @@
-import { Canvas, useLoader } from "@react-three/fiber";
+import React, { useState, useEffect } from "react";
+import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
-import React from "react";
 import "../styles/outputbox.css";
 
-function OutputBox({ boxSize }) {
-  const fbx = useLoader(FBXLoader, process.env.PUBLIC_URL + "/models/test.fbx");
+function OutputBox({ modelUrl }) {
+  const [fbx, setFbx] = useState(null);
+
+  useEffect(() => {
+    if (modelUrl) {
+      const loader = new FBXLoader();
+      loader.load(modelUrl, (object) => {
+        setFbx(object);
+      });
+    }
+  }, [modelUrl]); // 依赖于 modelUrl，当 modelUrl 改变时重新运行
 
   return (
     <Canvas className="output-Box-Canvas">
@@ -18,7 +27,8 @@ function OutputBox({ boxSize }) {
         intensity={Math.PI}
       />
       <pointLight position={[10, 10, 10]} />
-      <primitive object={fbx} scale={0.01} /> {/* 调整模型的缩放以适应场景 */}
+      {fbx && <primitive object={fbx} scale={0.01} />}{" "}
+      {/* 仅当 fbx 存在时，才渲染模型 */}
       <OrbitControls />
     </Canvas>
   );
