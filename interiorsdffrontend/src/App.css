@@ -1,0 +1,29 @@
+body {
+  background-color: #e0e0e0; /* 用你想要的颜色替换 */
+  background-size: cover; /* 使背景图片覆盖整个页面 */
+  background-position: center; /* 背景图片居中 */
+}
+
+.layout-row-top {
+  background-color: blueviolet;
+  height: 10vh;
+}
+
+.layout-row-middle {
+  height: 80vh;
+  background-color: rgb(172, 143, 199);
+}
+
+.layout-row-bottom {
+  background-color: rgb(108, 164, 30);
+  height: 10vh;
+}
+
+.input-col-left,
+.input-col-right {
+  padding: 20px;
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
