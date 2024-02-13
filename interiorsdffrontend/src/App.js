@@ -36,17 +36,19 @@ function App() {
     //   <header className="App-header"></header>
     <Container fluid className="main-layout">
       <Row className="layout-row-top">
-        <h1>SDF TOP</h1>
+        <div class="d-flex justify-content-center">
+          <h1>SDF TOP</h1>
+        </div>
       </Row>
       <Row className="layout-row-middle">
         <Container className="input-output-container">
           <Row>
-            <Col className="input-col-left" md={6} lg={6} xl={6} xxl={6}>
+            <Col className="input-col-left" sm={6} md={6} lg={6} xl={6} xxl={6}>
               <Stack gap={3}>
-                <div className="input-box-canvas">
+                <div className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
                   <InputBox boxSize={boxSize} />
                 </div>
-                <Stack gap={3} className="input-control-container">
+                <Stack gap={3} className="col-md-5 mx-auto">
                   <RangeControl
                     label="Long"
                     value={boxSize.x}
@@ -65,26 +67,36 @@ function App() {
                 </Stack>
               </Stack>
             </Col>
-            <Col className="output-col-right" md={6} lg={6} xl={6} xxl={6}>
+            <Col
+              className="output-col-right"
+              sm={6}
+              md={6}
+              lg={6}
+              xl={6}
+              xxl={6}
+            >
               <Stack gap={3}>
-                <div className="output-box-canvas">
+                <div className="output-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
                   <OutputBox modelUrl={modelUrl} />
                 </div>
-                <Stack gap={3} className="output-control-container">
+                <Stack gap={3} className="col-md-5 mx-auto ">
                   <Button
-                    variant="primary"
+                    variant="secondary"
+                    size="sm"
                     onClick={() => handleModelChange("case1")}
                   >
                     Case1
                   </Button>
                   <Button
-                    variant="primary"
+                    variant="secondary"
+                    size="sm"
                     onClick={() => handleModelChange("case2")}
                   >
                     Case2
                   </Button>
                   <Button
-                    variant="primary"
+                    variant="secondary"
+                    size="sm"
                     onClick={() => handleModelChange("case3")}
                   >
                     Case3
@@ -96,7 +108,9 @@ function App() {
         </Container>
       </Row>
       <Row className="layout-row-bottom">
-        <h1>Bottom</h1>
+        <div class="d-flex justify-content-center">
+          <h2>bottom</h2>
+        </div>
       </Row>
     </Container>
   );

@@ -5,32 +5,27 @@ body {
 }
 
 .layout-row-top {
-  background-color: blueviolet;
+  background-color: rgba(255, 255, 255, 0.726);
   height: 10vh;
 }
 
 .layout-row-middle {
   height: 80vh;
-  background-color: rgb(172, 143, 199);
+  background-color: rgba(255, 255, 255, 0.726);
 }
 
 .layout-row-bottom {
-  background-color: rgb(108, 164, 30);
+  background-color: rgba(255, 255, 255, 0.726);
   height: 10vh;
 }
 
 .input-col-left,
 .output-col-right {
   padding: 10px;
-  height: 80vh;
+  height: 75vh;
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.input-box-canvas,
-.output-box-canvas {
-  height: 60vh;
 }
 
 .input-control-container,
