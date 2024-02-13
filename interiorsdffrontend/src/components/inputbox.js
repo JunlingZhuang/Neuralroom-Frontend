@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import "../styles/inputbox.css";
-function InputBox() {
+function InputBox({ boxSize }) {
   return (
     <Canvas className="input-Box-Canvas">
       <ambientLight intensity={Math.PI / 2} />
@@ -15,7 +15,7 @@ function InputBox() {
 
       <pointLight position={[10, 10, 10]} />
       <mesh position={[0, 0, 0]}>
-        <boxGeometry args={[1, 1, 1]} /> {/* 设置立方体的尺寸为 1x1x1 */}
+        <boxGeometry args={[boxSize.x, boxSize.y, boxSize.z]} />
         <meshStandardMaterial color="royalblue" /> {/* 设置材质颜色 */}
       </mesh>
       <OrbitControls />

@@ -20,10 +20,20 @@ body {
 }
 
 .input-col-left,
-.input-col-right {
-  padding: 20px;
+.output-col-right {
+  padding: 10px;
   height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.input-box-canvas,
+.output-box-canvas {
+  height: 60vh;
+}
+
+.input-control-container,
+.output-control-container {
+  height: 10vh;
 }
