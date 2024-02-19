@@ -1,17 +1,38 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Stack from "react-bootstrap/Stack";
 
 import { Container, Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import { Canvas } from "@react-three/fiber";
 
+import GraphNetwork from "./components/graphnetwork.js";
 import InputBox from "./components/inputbox.js";
 import OutputBox from "./components/outputbox.js";
 import RangeControl from "./components/rangecontrol.js";
+import ResizeObserver from "resize-observer-polyfill";
 
 function App() {
+  const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
+  const containerRef = useRef(null);
+
+  // 使用 ResizeObserver 监听容器尺寸变化
+  useEffect(() => {
+    const resizeObserver = new ResizeObserver((entries) => {
+      const { width, height } = entries[0].contentRect;
+      setContainerSize({ width, height });
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [containerRef]); // 将 containerRef 添加到依赖项数组中
+
   const [modelUrl, setModelUrl] = useState("");
   const handleModelChange = (modelName) => {
     setModelUrl(`http://127.0.0.1:5000/models/${modelName}.fbx`);
@@ -45,8 +66,17 @@ function App() {
           <Row>
             <Col className="input-col-left" sm={6} md={6} lg={6} xl={6} xxl={6}>
               <Stack gap={3}>
-                <div className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
+                <div className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded d-block">
                   <InputBox boxSize={boxSize} />
+                </div>
+                <div
+                  ref={containerRef}
+                  className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded d-block"
+                >
+                  <GraphNetwork
+                    parentWidth={containerSize.width}
+                    parentHeight={containerSize.width}
+                  />
                 </div>
                 <Stack gap={3} className="col-md-5 mx-auto">
                   <RangeControl
