@@ -40,11 +40,12 @@ const GraphNetwork = ({ parentWidth, parentHeight }) => {
       .force("center", d3.forceCenter(width / 2, height / 2));
 
     const link = svg
-      .selectAll(".link")
+      .selectAll("path.link")
       .data(links)
       .enter()
-      .append("line")
-      .attr("class", "link");
+      .append("path")
+      .attr("stroke", "black")
+      .style("fill", "none");
 
     const node = svg
       .selectAll(".node")
@@ -57,11 +58,9 @@ const GraphNetwork = ({ parentWidth, parentHeight }) => {
       .style("stroke", "black");
 
     simulation.on("tick", () => {
-      link
-        .attr("x1", (d) => d.source.x)
-        .attr("y1", (d) => d.source.y)
-        .attr("x2", (d) => d.target.x)
-        .attr("y2", (d) => d.target.y);
+      link.attr("d", (d) => {
+        return `M${d.source.x},${d.source.y}L${d.target.x},${d.target.y}`;
+      });
 
       node.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
     });

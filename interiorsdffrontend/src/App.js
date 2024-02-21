@@ -66,16 +66,16 @@ function App() {
           <Row>
             <Col className="input-col-left" sm={6} md={6} lg={6} xl={6} xxl={6}>
               <Stack gap={3}>
-                <div className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded d-block">
+                <div className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
                   <InputBox boxSize={boxSize} />
                 </div>
                 <div
                   ref={containerRef}
-                  className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded d-block"
+                  className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-25 d-block"
                 >
                   <GraphNetwork
                     parentWidth={containerSize.width}
-                    parentHeight={containerSize.width}
+                    parentHeight={containerSize.height}
                   />
                 </div>
                 <Stack gap={3} className="col-md-5 mx-auto">
