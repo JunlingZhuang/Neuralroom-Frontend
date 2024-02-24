@@ -16,7 +16,7 @@ function InputBox({ boxSize }) {
       <pointLight position={[10, 10, 10]} />
       <mesh position={[0, 0, 0]}>
         <boxGeometry args={[boxSize.x, boxSize.y, boxSize.z]} />
-        <meshStandardMaterial color="royalblue" /> {/* 设置材质颜色 */}
+        <meshStandardMaterial color="royalblue" /> 
       </mesh>
       <OrbitControls />
     </Canvas>

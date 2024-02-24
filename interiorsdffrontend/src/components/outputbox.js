@@ -2,19 +2,35 @@ import React, { useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"; 
 import "../styles/outputbox.css";
+import * as THREE from "three";
 
 function OutputBox({ modelUrl }) {
-  const [fbx, setFbx] = useState(null);
+  const [model, setModel] = useState(null);
 
   useEffect(() => {
     if (modelUrl) {
-      const loader = new FBXLoader();
-      loader.load(modelUrl, (object) => {
-        setFbx(object);
-      });
+      const extension = modelUrl.split(".").pop().toLowerCase();
+      let loader = null;
+      if (extension === "obj") {
+        loader = new OBJLoader();
+      } else if (extension === "fbx") {
+        loader = new FBXLoader();
+      }
+
+      if (loader) {
+        loader.load(modelUrl, (object) => {
+          object.traverse((child) => {
+            if (child.isMesh) {
+              child.material.side = THREE.DoubleSide; 
+            }
+          });
+          setModel(object);
+        });
+      }
     }
-  }, [modelUrl]); // 依赖于 modelUrl，当 modelUrl 改变时重新运行
+  }, [modelUrl]);
 
   return (
     <Canvas className="output-Box-Canvas">
@@ -27,8 +43,7 @@ function OutputBox({ modelUrl }) {
         intensity={Math.PI}
       />
       <pointLight position={[10, 10, 10]} />
-      {fbx && <primitive object={fbx} scale={0.01} />}{" "}
-      {/* 仅当 fbx 存在时，才渲染模型 */}
+      {model && <primitive object={model} scale={0.01} />}{" "}
       <OrbitControls />
     </Canvas>
   );

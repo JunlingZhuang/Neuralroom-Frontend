@@ -33,11 +33,22 @@ function App() {
     };
   }, [containerRef]); // 将 containerRef 添加到依赖项数组中
 
-  const [modelUrl, setModelUrl] = useState("");
-  const handleModelChange = (modelName) => {
-    setModelUrl(`http://127.0.0.1:5000/models/${modelName}.fbx`);
-  };
 
+  const [modelUrl, setModelUrl] = useState('');
+
+  const handleModelDownload = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/generate');
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      setModelUrl(url);
+    } catch (error) {
+      console.error('Error fetching model:', error);
+    }
+  };
   // set the initial size of the input box
   const [boxSize, setBoxSize] = useState({ x: 1, y: 1, z: 1 });
 
@@ -113,21 +124,21 @@ function App() {
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => handleModelChange("case1")}
+                    onClick={handleModelDownload}
                   >
                     Case1
                   </Button>
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => handleModelChange("case2")}
+                    onClick={handleModelDownload}
                   >
                     Case2
                   </Button>
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => handleModelChange("case3")}
+                    onClick={handleModelDownload}
                   >
                     Case3
                   </Button>
