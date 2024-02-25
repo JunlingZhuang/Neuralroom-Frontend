@@ -1,41 +1,37 @@
 import React, { useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader"; 
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import "../styles/outputbox.css";
 import * as THREE from "three";
 
-function OutputBox({ modelUrl }) {
+function OutputBox({ modelData }) {
   const [model, setModel] = useState(null);
 
   useEffect(() => {
-    if (modelUrl) {
-      const extension = modelUrl.split(".").pop().toLowerCase();
-      let loader = null;
-      if (extension === "obj") {
-        loader = new OBJLoader();
-      } else if (extension === "fbx") {
-        loader = new FBXLoader();
-      }
-
-      if (loader) {
-        loader.load(modelUrl, (object) => {
-          object.traverse((child) => {
-            if (child.isMesh) {
-              child.material.side = THREE.DoubleSide; 
-            }
+    if (modelData) {
+      const loader = new OBJLoader();
+      // Parse the model data and set the model state
+      const object = loader.parse(modelData);
+      object.traverse((child) => {
+        if (child.isMesh) {
+          child.material = new THREE.MeshStandardMaterial({
+            metalness: 0.1, 
+            roughness: 0.5, 
+            side: THREE.DoubleSide, 
+            color: "#cc7b32",
           });
-          setModel(object);
-        });
-      }
+        }
+      });
+      setModel(object);
     }
-  }, [modelUrl]);
+  }, [modelData]);
 
   return (
-    <Canvas className="output-Box-Canvas">
+    <Canvas className="output-Box-Canvas" camera={{ fov: 80 }} shadows>
       <ambientLight intensity={Math.PI / 2} />
       <spotLight
+        castShadow
         position={[10, 10, 10]}
         angle={0.15}
         penumbra={1}
@@ -43,8 +39,8 @@ function OutputBox({ modelUrl }) {
         intensity={Math.PI}
       />
       <pointLight position={[10, 10, 10]} />
-      {model && <primitive object={model} scale={0.01} />}{" "}
-      <OrbitControls />
+      <fog attach="fog" args={["#cc7b32", 16, 20]} />
+      {model && <primitive object={model} scale={0.5} />} <OrbitControls />
     </Canvas>
   );
 }
