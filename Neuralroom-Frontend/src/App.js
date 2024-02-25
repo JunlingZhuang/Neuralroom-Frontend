@@ -2,11 +2,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import React, { useRef, useState, useEffect } from "react";
 import Stack from "react-bootstrap/Stack";
-
 import { Container, Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import { Canvas } from "@react-three/fiber";
-
 import GraphNetwork from "./components/graphnetwork.js";
 import InputBox from "./components/inputbox.js";
 import OutputBox from "./components/outputbox.js";
@@ -31,13 +28,22 @@ function App() {
     return () => {
       resizeObserver.disconnect();
     };
-  }, [containerRef]); // 将 containerRef 添加到依赖项数组中
+  }, [containerRef]); 
 
-  const [modelUrl, setModelUrl] = useState("");
-  const handleModelChange = (modelName) => {
-    setModelUrl(`http://127.0.0.1:5000/models/${modelName}.fbx`);
+  const [modelData, setModelData] = useState("");
+
+  const handleModelDownload = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/generate");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json(); 
+      setModelData(data.model_data); 
+    } catch (error) {
+      console.error("Error fetching model:", error);
+    }
   };
-
   // set the initial size of the input box
   const [boxSize, setBoxSize] = useState({ x: 1, y: 1, z: 1 });
 
@@ -107,27 +113,27 @@ function App() {
             >
               <Stack gap={3}>
                 <div className="output-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
-                  <OutputBox modelUrl={modelUrl} />
+                  <OutputBox modelData={modelData} />
                 </div>
                 <Stack gap={3} className="col-md-5 mx-auto ">
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => handleModelChange("case1")}
+                    onClick={handleModelDownload}
                   >
                     Case1
                   </Button>
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => handleModelChange("case2")}
+                    onClick={handleModelDownload}
                   >
                     Case2
                   </Button>
                   <Button
                     variant="secondary"
                     size="sm"
-                    onClick={() => handleModelChange("case3")}
+                    onClick={handleModelDownload}
                   >
                     Case3
                   </Button>
