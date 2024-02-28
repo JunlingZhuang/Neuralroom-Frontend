@@ -28,39 +28,51 @@ function App() {
     return () => {
       resizeObserver.disconnect();
     };
-  }, [containerRef]); 
+  }, [containerRef]);
 
   const [modelData, setModelData] = useState("");
 
   const handleModelDownload = async () => {
     try {
-      const response = await fetch("http://localhost:5000/generate");
+      // 创建请求体，包含XYZ值
+      const requestBody = {
+        length: boxSize.length,
+        height: boxSize.height,
+        width: boxSize.width,
+      };
+
+      // 发送请求到后端
+      const response = await fetch("http://localhost:5000/generate", {
+        method: "POST", // 假设使用POST方法发送数据
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody), // 将请求体转换为JSON字符串
+      });
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      const data = await response.json(); 
-      setModelData(data.model_data); 
+
+      // 处理响应数据
+      const data = await response.json();
+      setModelData(data.model_data);
+      setShouldRenderModel(true);
     } catch (error) {
       console.error("Error fetching model:", error);
     }
   };
+
   // set the initial size of the input box
-  const [boxSize, setBoxSize] = useState({ x: 1, y: 1, z: 1 });
-
-  const handleSizeChangeX = (newValue) => {
-    setBoxSize((prevSize) => ({ ...prevSize, x: newValue }));
-  };
-
-  const handleSizeChangeY = (newValue) => {
-    setBoxSize((prevSize) => ({ ...prevSize, y: newValue }));
-  };
-  const handleSizeChangeZ = (newValue) => {
-    setBoxSize((prevSize) => ({ ...prevSize, z: newValue }));
+  const [boxSize, setBoxSize] = useState({ length: 1, height: 1, width: 1 });
+  const [shouldRenderModel, setShouldRenderModel] = useState(false);
+  // 当RangeControl变化时，更新boxSize，并重置shouldRenderModel为false
+  const handleSizeChange = (dimension, newValue) => {
+    setBoxSize((prevSize) => ({ ...prevSize, [dimension]: newValue }));
+    setShouldRenderModel(false); // 重置标志，以便渲染立方体
   };
 
   return (
-    // <div className="App">
-    //   <header className="App-header"></header>
     <Container fluid className="main-layout">
       <Row className="layout-row-top">
         <div class="d-flex justify-content-center">
@@ -72,35 +84,19 @@ function App() {
           <Row>
             <Col className="input-col-left" sm={6} md={6} lg={6} xl={6} xxl={6}>
               <Stack gap={3}>
-                <div className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
+                {/* <div className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
                   <InputBox boxSize={boxSize} />
-                </div>
+                </div> */}
                 <div
                   ref={containerRef}
-                  className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-25 d-block"
+                  className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block"
                 >
                   <GraphNetwork
                     parentWidth={containerSize.width}
                     parentHeight={containerSize.height}
                   />
                 </div>
-                <Stack gap={3} className="col-md-5 mx-auto">
-                  <RangeControl
-                    label="Long"
-                    value={boxSize.x}
-                    onChange={(e) => handleSizeChangeX(e.target.value)}
-                  />
-                  <RangeControl
-                    label="Height"
-                    value={boxSize.y}
-                    onChange={(e) => handleSizeChangeY(e.target.value)}
-                  />
-                  <RangeControl
-                    label="Width"
-                    value={boxSize.z}
-                    onChange={(e) => handleSizeChangeZ(e.target.value)}
-                  />
-                </Stack>
+                <Stack gap={3} className="col-md-5 mx-auto"></Stack>
               </Stack>
             </Col>
             <Col
@@ -113,29 +109,34 @@ function App() {
             >
               <Stack gap={3}>
                 <div className="output-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
-                  <OutputBox modelData={modelData} />
+                  <OutputBox
+                    modelData={shouldRenderModel ? modelData : null}
+                    boxSize={!shouldRenderModel ? boxSize : null}
+                    shouldRenderModel={shouldRenderModel}
+                  />
                 </div>
                 <Stack gap={3} className="col-md-5 mx-auto ">
+                  <RangeControl
+                    label="length"
+                    value={boxSize.length}
+                    onChange={(e) => handleSizeChange("length", e.target.value)}
+                  />
+                  <RangeControl
+                    label="Height"
+                    value={boxSize.height}
+                    onChange={(e) => handleSizeChange("height", e.target.value)}
+                  />
+                  <RangeControl
+                    label="Width"
+                    value={boxSize.width}
+                    onChange={(e) => handleSizeChange("width", e.target.value)}
+                  />
                   <Button
                     variant="secondary"
                     size="sm"
                     onClick={handleModelDownload}
                   >
-                    Case1
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={handleModelDownload}
-                  >
-                    Case2
-                  </Button>
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={handleModelDownload}
-                  >
-                    Case3
+                    Generate
                   </Button>
                 </Stack>
               </Stack>
