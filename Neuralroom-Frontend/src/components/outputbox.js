@@ -5,8 +5,9 @@ import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 import "../styles/outputbox.css";
 import * as THREE from "three";
 
-function OutputBox({ modelData }) {
+function OutputBox({ modelData, boxSize, shouldRenderModel }) {
   const [model, setModel] = useState(null);
+  const [scale, setScale] = useState([1, 1, 1]); // 初始缩放比例为1:1:1
 
   useEffect(() => {
     if (modelData) {
@@ -16,9 +17,9 @@ function OutputBox({ modelData }) {
       object.traverse((child) => {
         if (child.isMesh) {
           child.material = new THREE.MeshStandardMaterial({
-            metalness: 0.1, 
-            roughness: 0.5, 
-            side: THREE.DoubleSide, 
+            metalness: 0.1,
+            roughness: 0.5,
+            side: THREE.DoubleSide,
             color: "#cc7b32",
           });
         }
@@ -32,7 +33,7 @@ function OutputBox({ modelData }) {
       <ambientLight intensity={Math.PI / 2} />
       <spotLight
         castShadow
-        position={[10, 10, 10]}
+        position={[50, 50, 0]}
         angle={0.15}
         penumbra={1}
         decay={0}
@@ -40,7 +41,15 @@ function OutputBox({ modelData }) {
       />
       <pointLight position={[10, 10, 10]} />
       <fog attach="fog" args={["#cc7b32", 16, 20]} />
-      {model && <primitive object={model} scale={0.5} />} <OrbitControls />
+      {modelData && shouldRenderModel ? (
+        <primitive object={model} scale={scale} />
+      ) : (
+        <mesh position={[0, 0, 0]}>
+          <boxGeometry args={[boxSize.length, boxSize.height, boxSize.width]} />
+          <meshPhongMaterial color="#cc7b32" opacity={0.5} transparent />
+        </mesh>
+      )}
+      <OrbitControls />
     </Canvas>
   );
 }
