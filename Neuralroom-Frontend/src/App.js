@@ -76,7 +76,7 @@ function App() {
     <Container fluid className="main-layout">
       <Row className="layout-row-top">
         <div class="d-flex justify-content-center">
-          <h1>SDF TOP</h1>
+          <h1>Neural Room</h1>
         </div>
       </Row>
       <Row className="layout-row-middle">
