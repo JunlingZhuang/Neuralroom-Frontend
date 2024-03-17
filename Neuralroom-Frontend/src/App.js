@@ -9,6 +9,7 @@ import InputBox from "./components/inputbox.js";
 import OutputBox from "./components/outputbox.js";
 import RangeControl from "./components/rangecontrol.js";
 import ResizeObserver from "resize-observer-polyfill";
+import MyButton from "./components/mybutton.tsx";
 
 function App() {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
@@ -138,6 +139,7 @@ function App() {
                   >
                     Generate
                   </Button>
+                  <MyButton title="I'm a disabled button" disabled={true} />
                 </Stack>
               </Stack>
             </Col>
