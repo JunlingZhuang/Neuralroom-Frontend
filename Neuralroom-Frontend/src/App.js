@@ -5,6 +5,7 @@ import Stack from "react-bootstrap/Stack";
 import { Container, Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import GraphNetwork from "./components/graphnetwork.js";
+import GraphComponent from "./components/graphnetwork/GraphComponent.jsx";
 import InputBox from "./components/inputbox.js";
 import OutputBox from "./components/outputbox.js";
 import RangeControl from "./components/rangecontrol.js";
@@ -57,6 +58,9 @@ function App() {
 
       // 处理响应数据
       const data = await response.json();
+      // TO BE DONE: better replace it with some check
+      //  TO BE DONE: await fetching the data.model_data
+      console.log(data);
       setModelData(data.model_data);
       setShouldRenderModel(true);
     } catch (error) {
@@ -92,7 +96,7 @@ function App() {
                   ref={containerRef}
                   className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block"
                 >
-                  <GraphNetwork
+                  <GraphComponent
                     parentWidth={containerSize.width}
                     parentHeight={containerSize.height}
                   />

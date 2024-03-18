@@ -4,11 +4,15 @@ export declare interface Props {
   [key: string]: string | number;
 }
 
-export declare interface Node{
-    initX?:number;
-    initY?:number;
-    properties?:Props;
-    [key:string]:any;
+export declare interface Node {
+  initX?: number;
+  initY?: number;
+  program?: number;
+  programName?: string;
+  properties?: Props;
+  color?: string;
+
+  [key: string]: any;
 }
 
 export declare interface Edge {
@@ -38,11 +42,9 @@ export function copy(obj: object) {
   return JSON.parse(JSON.stringify(obj));
 }
 
-export function setDataInitPos(data: any[]) {
+export function setDataInitPos(data: any[], width: number, height: number) {
   for (let i = 0; i < data.length; i++) {
     const svg = d3.select("svg");
-    const width = +svg.attr("width");
-    const height = +svg.attr("height");
     data[i].nodes.forEach((d, j) => {
       if (!d.processed) {
         if (d.initX) {
