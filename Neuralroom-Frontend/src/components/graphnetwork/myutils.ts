@@ -14,8 +14,10 @@ export declare interface Node {
 }
 
 export declare interface Edge {
-  source: number | Node;
-  target: number | Node;
+  source: number;
+  target: number;
+  sourceNode: Node;
+  targetNode: Node;
   properties?: Props;
   [key: string]: any;
 }
@@ -75,8 +77,6 @@ export function setDataInitPos(data: any[], width: number, height: number) {
         node.initX = x;
         node.initY = y;
       }
-      //   node.x = node.initX;
-      //   node.y = node.initY;
       node.processed = true;
     }
   });

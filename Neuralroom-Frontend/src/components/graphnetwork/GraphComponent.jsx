@@ -18,43 +18,47 @@ const GraphComponent = ({ parentWidth, parentHeight }) => {
   };
 
   useEffect(() => {
-    // load data
-    fetch("/sample_set/node.json")
-      .then((response) => response.json())
-      .then((nodes) => {
+    const loadData = async () => {
+      try {
+        // load node data
+        const nodeResponse = await fetch("/sample_set/node.json");
+        const nodes = await nodeResponse.json();
+
+        // set up the margin and dimensions of the graph
         const margin = { top: 5, right: 5, bottom: 5, left: 5 };
         const width = parentWidth - margin.left - margin.right;
         const height = parentHeight - margin.top - margin.bottom;
         nodes.forEach((node) => (node.processed = false));
-
         const preparedNodes = setDataInitPos(nodes, width, height);
-        const graphData = { nodes: preparedNodes, edges: [] };
 
-        // Fetch program color and name data from dict
-        fetch("/dict/program_dict.json")
-          .then((response) => response.json())
-          .then((programData) => {
-            // Merge program data into node objects
-            graphData.nodes.forEach((node) => {
-              const programInfo = programData[node.program];
-              if (programInfo) {
-                node.programName = programInfo.programName;
-                node.color = programInfo.color;
-              }
-            });
-            console.log(graphData);
-            // Create the graph with updated node data
-            if (svgRef.current) {
-              new MyGraph(graphData, svgRef.current, updateTooltip);
-            }
-          })
-          .catch((error) => {
-            console.error("Error loading program data:", error);
-          });
-      })
-      .catch((error) => {
-        console.error("Error loading node data:", error);
-      });
+        // add program name and color to the nodes
+        const dictResponse = await fetch("/dict/program_dict.json");
+        const programData = await dictResponse.json();
+        preparedNodes.forEach((node) => {
+          const programInfo = programData[node.program];
+          if (programInfo) {
+            node.programName = programInfo.programName;
+            node.color = programInfo.color;
+          }
+        });
+
+        // load edge data
+        const edgeResponse = await fetch("/sample_set/edge.json");
+        const edges = await edgeResponse.json();
+      
+        // create the graph data object
+        const graphData = { nodes: preparedNodes, edges: edges };
+
+        // create the graph when the data is loaded
+        if (svgRef.current) {
+          new MyGraph(graphData, svgRef.current, updateTooltip);
+        }
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    };
+
+    loadData();
   }, [parentWidth, parentHeight, setTooltip]);
 
   return (

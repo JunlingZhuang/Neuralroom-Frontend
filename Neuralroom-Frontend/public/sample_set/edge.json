@@ -1,7 +1,8 @@
 [
-  { "type": 1, "index_from": 1, "index_to": 2 },
-  { "type": 2, "index_from": 4, "index_to": 3 },
-  { "type": 3, "index_from": 5, "index_to": 6 },
-  { "type": 4, "index_from": 7, "index_to": 8 },
-  { "type": 2, "index_from": 9, "index_to": 3 }
+  { "type": 1, "source": 1, "target": 2 },
+  { "type": 2, "source": 4, "target": 3 },
+  { "type": 3, "source": 5, "target": 4 },
+  { "type": 4, "source": 5, "target": 2 },
+  { "type": 2, "source": 2, "target": 3 },
+  { "type": 3, "source": 0, "target": 4 }
 ]
