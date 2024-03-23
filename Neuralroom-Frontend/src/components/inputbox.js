@@ -12,7 +12,7 @@ function InputBox({ boxSize }) {
         decay={0}
         intensity={Math.PI}
       />
-
+      
       <pointLight position={[10, 10, 10]} />
       <mesh position={[0, 0, 0]}>
         <boxGeometry args={[boxSize.x, boxSize.y, boxSize.z]} />

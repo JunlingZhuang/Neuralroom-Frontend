@@ -1,10 +1,27 @@
-// 在GraphComponent.jsx中
-import React, { useState, useEffect, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import MyGraph from "./MyGraph";
 import { setDataInitPos } from "./myutils";
 import * as d3 from "d3";
 
-const GraphComponent = ({ parentWidth, parentHeight }) => {
+const GraphComponent = forwardRef(({ parentWidth, parentHeight }, ref) => {
+  const myGraphRef = useRef(null);
+
+  // 使用useImperativeHandle来暴露组件的方法
+  useImperativeHandle(ref, () => ({
+    sendGraph() {
+      const graphDataTest = myGraphRef.current.sendGraphData();
+
+      // 定义一个方法，比如更新图表等
+      console.log("GraphComponent custom method called");
+      return graphDataTest;
+    },
+  }));
   const svgRef = useRef(null);
   //set up state for tooltip
   const [tooltip, setTooltip] = useState({
@@ -45,13 +62,17 @@ const GraphComponent = ({ parentWidth, parentHeight }) => {
         // load edge data
         const edgeResponse = await fetch("/sample_set/edge.json");
         const edges = await edgeResponse.json();
-      
+
         // create the graph data object
         const graphData = { nodes: preparedNodes, edges: edges };
 
         // create the graph when the data is loaded
         if (svgRef.current) {
-          new MyGraph(graphData, svgRef.current, updateTooltip);
+          myGraphRef.current = new MyGraph(
+            graphData,
+            svgRef.current,
+            updateTooltip
+          );
         }
       } catch (error) {
         console.error("Error loading data:", error);
@@ -88,6 +109,6 @@ const GraphComponent = ({ parentWidth, parentHeight }) => {
       )}
     </>
   );
-};
+});
 
 export default GraphComponent;

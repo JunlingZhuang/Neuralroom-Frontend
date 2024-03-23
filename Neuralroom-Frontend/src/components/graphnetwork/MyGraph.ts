@@ -6,7 +6,7 @@ class MyGraph {
   private svg: d3.Selection<SVGSVGElement, unknown, null, undefined>;
   private nodes: any;
   // private simulation: any;
-  private simulation: any; 
+  private simulation: any;
 
   // private nodes: d3.Selection<SVGCircleElement, Node, SVGGElement, unknown>;
   // private edges: d3.Selection<SVGLineElement, Edge, SVGSVGElement, unknown>;
@@ -40,6 +40,16 @@ class MyGraph {
 
     this.initializeGraph();
     this.initializeSimulation();
+  }
+  
+  // send graph data to parent component
+  sendGraphData() {
+    const graphData = {
+      nodes: this.graphData.nodes.map((node) => ({ ...node })),
+      edges: this.graphData.edges.map((edge) => ({ ...edge })),
+    };
+    console.log("Sending data from MyGraph:", graphData);
+    return graphData;
   }
   private initializeGraph(): void {
     this.renderEdges();
@@ -99,8 +109,6 @@ class MyGraph {
       .style("stroke", "black")
       .style("fill", "white")
       .on("mouseover", (event, d) => {
-        console.log("mousemove data:", d.program);
-
         this.updateTooltip(
           true,
           `Program: ${d.programName}`,
@@ -125,7 +133,6 @@ class MyGraph {
   }
 
   private renderEdges(): void {
-    console.log("renderEdges", this.edges);
     this.edges
       .join("line")
       .classed("edge", true)

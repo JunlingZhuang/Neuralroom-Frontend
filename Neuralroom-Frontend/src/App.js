@@ -4,7 +4,6 @@ import React, { useRef, useState, useEffect } from "react";
 import Stack from "react-bootstrap/Stack";
 import { Container, Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
-import GraphNetwork from "./components/graphnetwork.js";
 import GraphComponent from "./components/graphnetwork/GraphComponent.jsx";
 import InputBox from "./components/inputbox.js";
 import OutputBox from "./components/outputbox.js";
@@ -15,8 +14,10 @@ import MyButton from "./components/mybutton.tsx";
 function App() {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const containerRef = useRef(null);
+  const graphDataRef = useRef(null);
 
-  // 使用 ResizeObserver 监听容器尺寸变化
+
+  // use ResizeObserver to get the size of the container
   useEffect(() => {
     const resizeObserver = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect;
@@ -35,28 +36,42 @@ function App() {
   const [modelData, setModelData] = useState("");
 
   const handleModelDownload = async () => {
+    //TO DO: send graphData to the backend
+    const nodesData = graphDataRef.current
+      .sendGraph()
+      .nodes.map((node) => node.program);
+    // const edgesData = graphDataRef.current.sendGraph().edges;
+    const edgesData = graphDataRef.current
+      .sendGraph()
+      .edges.map((edge) => [edge.source.index, edge.type, edge.target.index]);
+
+    console.log("Graph data sent to the backend", nodesData);
+    console.log("Graph data sent to the backend", edgesData);
     try {
-      // 创建请求体，包含XYZ值
+      // create the request body
       const requestBody = {
+        nodes: nodesData,
+        edges: edgesData,
         length: boxSize.length,
         height: boxSize.height,
         width: boxSize.width,
       };
 
-      // 发送请求到后端
+      // send request to the backend
       const response = await fetch("http://localhost:5000/generate", {
-        method: "POST", // 假设使用POST方法发送数据
+        method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestBody), // 将请求体转换为JSON字符串
+        // change the request body to a JSON string
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
 
-      // 处理响应数据
+      // handle the response data
       const data = await response.json();
       // TO BE DONE: better replace it with some check
       //  TO BE DONE: await fetching the data.model_data
@@ -71,10 +86,10 @@ function App() {
   // set the initial size of the input box
   const [boxSize, setBoxSize] = useState({ length: 1, height: 1, width: 1 });
   const [shouldRenderModel, setShouldRenderModel] = useState(false);
-  // 当RangeControl变化时，更新boxSize，并重置shouldRenderModel为false
+  // when range control changes, update boxSize and reset shouldRenderModel to false
   const handleSizeChange = (dimension, newValue) => {
     setBoxSize((prevSize) => ({ ...prevSize, [dimension]: newValue }));
-    setShouldRenderModel(false); // 重置标志，以便渲染立方体
+    setShouldRenderModel(false); 
   };
 
   return (
@@ -99,6 +114,7 @@ function App() {
                   <GraphComponent
                     parentWidth={containerSize.width}
                     parentHeight={containerSize.height}
+                    ref={graphDataRef}
                   />
                 </div>
                 <Stack gap={3} className="col-md-5 mx-auto"></Stack>
