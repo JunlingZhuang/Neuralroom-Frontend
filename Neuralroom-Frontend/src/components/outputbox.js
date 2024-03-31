@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
-import "../styles/outputbox.css";
+// import "../styles/outputbox.css";
 import * as THREE from "three";
 
 function OutputBox({ modelData, boxSize, shouldRenderModel }) {
@@ -29,7 +29,7 @@ function OutputBox({ modelData, boxSize, shouldRenderModel }) {
   }, [modelData]);
 
   return (
-    <Canvas className="output-Box-Canvas" camera={{ fov: 80 }} shadows>
+    <Canvas className="!h-4/5" camera={{ fov: 80 }} shadows>
       <ambientLight intensity={Math.PI / 2} />
       <spotLight
         castShadow

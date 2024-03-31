@@ -1,21 +1,18 @@
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import React, { useRef, useState, useEffect } from "react";
 import Stack from "react-bootstrap/Stack";
 import { Container, Row, Col } from "react-bootstrap";
-import Button from "react-bootstrap/Button";
 import GraphComponent from "./components/graphnetwork/GraphComponent.jsx";
 import InputBox from "./components/inputbox.js";
 import OutputBox from "./components/outputbox.js";
 import RangeControl from "./components/rangecontrol.js";
 import ResizeObserver from "resize-observer-polyfill";
-import MyButton from "./components/mybutton.tsx";
 
 function App() {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const containerRef = useRef(null);
   const graphDataRef = useRef(null);
-
 
   // use ResizeObserver to get the size of the container
   useEffect(() => {
@@ -89,24 +86,48 @@ function App() {
   // when range control changes, update boxSize and reset shouldRenderModel to false
   const handleSizeChange = (dimension, newValue) => {
     setBoxSize((prevSize) => ({ ...prevSize, [dimension]: newValue }));
-    setShouldRenderModel(false); 
+    setShouldRenderModel(false);
   };
 
   return (
-    <Container fluid className="main-layout">
-      <Row className="layout-row-top">
-        <div class="d-flex justify-content-center">
-          <h1>Neural Room</h1>
+    <div className="main bg-slate-400 flex flex-col h-screen">
+      <div class="bg-green-400 text-center h-1/6">
+        <h1>Neural Room</h1>
+      </div>
+      <div className="text-center flex flex-row h-4/6">
+        <div className="bg-orange-400 flex-1 w-32 flex flex-col">
+          left
+          <div className="graphNetwork bg-yellow-200 h-full">
+            graphNetwork
+            <div ref={containerRef} className="h-4/5">
+              <GraphComponent
+                parentWidth={containerSize.width}
+                parentHeight={containerSize.height}
+                ref={graphDataRef}
+              />
+            </div>
+          </div>
+          <div className="SettingPanels bg-lime-500">Setting Panels</div>
         </div>
-      </Row>
-      <Row className="layout-row-middle">
+        <div className="bg-blue-500 flex-1 w-32 flex flex-col">
+          right
+          <div className="canvas-container bg-yellow-200 h-full">
+            3D models
+            <OutputBox
+              className="h-4/5"
+              modelData={shouldRenderModel ? modelData : null}
+              boxSize={!shouldRenderModel ? boxSize : null}
+              shouldRenderModel={shouldRenderModel}
+            />
+          </div>
+          <div className="bg-yellow-500">Control Panels</div>
+        </div>
+      </div>
+      {/* <div className="layout-row-middle ">
         <Container className="input-output-container">
           <Row>
             <Col className="input-col-left" sm={6} md={6} lg={6} xl={6} xxl={6}>
               <Stack gap={3}>
-                {/* <div className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
-                  <InputBox boxSize={boxSize} />
-                </div> */}
                 <div
                   ref={containerRef}
                   className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block"
@@ -152,26 +173,19 @@ function App() {
                     value={boxSize.width}
                     onChange={(e) => handleSizeChange("width", e.target.value)}
                   />
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    onClick={handleModelDownload}
-                  >
-                    Generate
-                  </Button>
-                  <MyButton title="I'm a disabled button" disabled={true} />
+                  <button onClick={handleModelDownload}>Generate</button>
                 </Stack>
               </Stack>
             </Col>
           </Row>
         </Container>
-      </Row>
-      <Row className="layout-row-bottom">
-        <div class="d-flex justify-content-center">
-          <h2>bottom</h2>
+      </div> */}
+      <div className="h-1/6">
+        <div className="text-center">
+          <h1>bottom</h1>
         </div>
-      </Row>
-    </Container>
+      </div>
+    </div>
   );
 }
 
