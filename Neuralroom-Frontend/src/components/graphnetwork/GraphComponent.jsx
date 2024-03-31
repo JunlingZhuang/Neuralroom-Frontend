@@ -12,12 +12,10 @@ import * as d3 from "d3";
 const GraphComponent = forwardRef(({ parentWidth, parentHeight }, ref) => {
   const myGraphRef = useRef(null);
 
-  // 使用useImperativeHandle来暴露组件的方法
   useImperativeHandle(ref, () => ({
     sendGraph() {
       const graphDataTest = myGraphRef.current.sendGraphData();
 
-      // 定义一个方法，比如更新图表等
       console.log("GraphComponent custom method called");
       return graphDataTest;
     },
