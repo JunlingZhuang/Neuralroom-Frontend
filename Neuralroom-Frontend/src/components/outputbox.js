@@ -11,20 +11,25 @@ function OutputBox({ modelData, boxSize, shouldRenderModel }) {
 
   useEffect(() => {
     if (modelData) {
-      const loader = new OBJLoader();
-      // Parse the model data and set the model state
-      const object = loader.parse(modelData);
-      object.traverse((child) => {
-        if (child.isMesh) {
-          child.material = new THREE.MeshStandardMaterial({
-            metalness: 0.1,
-            roughness: 0.5,
-            side: THREE.DoubleSide,
-            color: "#cc7b32",
-          });
-        }
-      });
-      setModel(object);
+      try {
+        const loader = new OBJLoader();
+        const object = loader.parse(modelData);
+        object.traverse((child) => {
+          if (child.isMesh) {
+            child.material = new THREE.MeshStandardMaterial({
+              metalness: 0.1,
+              roughness: 0.5,
+              side: THREE.DoubleSide,
+              color: "#cc7b32",
+            });
+          }
+        });
+        setModel(object);
+        // Optionally, set a state variable here to indicate the model is ready to render
+      } catch (error) {
+        console.error("Error loading model:", error);
+        // Handle the error appropriately
+      }
     }
   }, [modelData]);
 
