@@ -46,7 +46,7 @@ function OutputBox({ modelData, boxSize, shouldRenderModel }) {
       />
       <pointLight position={[10, 10, 10]} />
       <fog attach="fog" args={["#cc7b32", 16, 20]} />
-      {modelData && shouldRenderModel ? (
+      {modelData && shouldRenderModel && model ? (
         <primitive object={model} scale={scale} />
       ) : (
         <mesh position={[0, 0, 0]}>
