@@ -7,24 +7,29 @@ import * as THREE from "three";
 
 function OutputBox({ modelData, boxSize, shouldRenderModel }) {
   const [model, setModel] = useState(null);
-  const [scale, setScale] = useState([1, 1, 1]); // 初始缩放比例为1:1:1
+  const [scale, setScale] = useState([1, 1, 1]);
 
   useEffect(() => {
     if (modelData) {
-      const loader = new OBJLoader();
-      // Parse the model data and set the model state
-      const object = loader.parse(modelData);
-      object.traverse((child) => {
-        if (child.isMesh) {
-          child.material = new THREE.MeshStandardMaterial({
-            metalness: 0.1,
-            roughness: 0.5,
-            side: THREE.DoubleSide,
-            color: "#cc7b32",
-          });
-        }
-      });
-      setModel(object);
+      try {
+        const loader = new OBJLoader();
+        const object = loader.parse(modelData);
+        object.traverse((child) => {
+          if (child.isMesh) {
+            child.material = new THREE.MeshStandardMaterial({
+              metalness: 0.1,
+              roughness: 0.5,
+              side: THREE.DoubleSide,
+              color: "#cc7b32",
+            });
+          }
+        });
+        setModel(object);
+        // Optionally, set a state variable here to indicate the model is ready to render
+      } catch (error) {
+        console.error("Error loading model:", error);
+        // Handle the error appropriately
+      }
     }
   }, [modelData]);
 
@@ -41,7 +46,7 @@ function OutputBox({ modelData, boxSize, shouldRenderModel }) {
       />
       <pointLight position={[10, 10, 10]} />
       <fog attach="fog" args={["#cc7b32", 16, 20]} />
-      {modelData && shouldRenderModel ? (
+      {modelData && shouldRenderModel && model ? (
         <primitive object={model} scale={scale} />
       ) : (
         <mesh position={[0, 0, 0]}>

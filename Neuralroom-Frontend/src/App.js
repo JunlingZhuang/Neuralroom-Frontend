@@ -153,7 +153,7 @@ function App() {
                 <div className="output-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
                   <OutputBox
                     modelData={shouldRenderModel ? modelData : null}
-                    boxSize={!shouldRenderModel ? boxSize : null}
+                    boxSize = {boxSize}
                     shouldRenderModel={shouldRenderModel}
                   />
                 </div>
