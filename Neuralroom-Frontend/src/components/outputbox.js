@@ -34,7 +34,7 @@ function OutputBox({ modelData, boxSize, shouldRenderModel }) {
   }, [modelData]);
 
   return (
-    <Canvas className="!h-4/5" camera={{ fov: 80 }} shadows>
+    <Canvas className="!h-full" camera={{ fov: 80 }} shadows>
       <ambientLight intensity={Math.PI / 2} />
       <spotLight
         castShadow

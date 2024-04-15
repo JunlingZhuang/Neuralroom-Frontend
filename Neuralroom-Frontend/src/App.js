@@ -98,8 +98,8 @@ function App() {
         <div className="bg-orange-400 flex-1 w-32 flex flex-col">
           left
           <div className="graphNetwork bg-yellow-200 h-full">
-            graphNetwork
-            <div ref={containerRef} className="h-4/5">
+            {/* graphNetwork */}
+            <div ref={containerRef} className="h-full">
               <GraphComponent
                 parentWidth={containerSize.width}
                 parentHeight={containerSize.height}
@@ -107,20 +107,42 @@ function App() {
               />
             </div>
           </div>
-          <div className="SettingPanels bg-lime-500">Setting Panels</div>
+          <div className="SettingPanels bg-lime-500 flex flex-row h-1/6 items-center">
+            <div className="program basis-1/3">program</div>
+            <div className="foorNumber basis-1/3">floorNumber</div>
+            <div className="relationship basis-1/3">relationship</div>
+          </div>
         </div>
         <div className="bg-blue-500 flex-1 w-32 flex flex-col">
           right
           <div className="canvas-container bg-yellow-200 h-full">
-            3D models
+            {/* 3D models */}
             <OutputBox
-              className="h-4/5"
+              // className="h-full"
               modelData={shouldRenderModel ? modelData : null}
               boxSize={!shouldRenderModel ? boxSize : null}
               shouldRenderModel={shouldRenderModel}
             />
           </div>
-          <div className="bg-yellow-500">Control Panels</div>
+          <div className="size-control-panels flex flex-row bg-yellow-500 h-1/6 items-center">
+            <div className="length basis-1/3">
+              <label
+                for="default-range"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+              >
+                Default range
+              </label>
+
+              <input
+                id="default-range"
+                type="range"
+                value="50"
+                class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
+              ></input>
+            </div>
+            <div className="height basis-1/3">height</div>
+            <div className="width basis-1/3">width</div>
+          </div>
         </div>
       </div>
       {/* <div className="layout-row-middle ">
