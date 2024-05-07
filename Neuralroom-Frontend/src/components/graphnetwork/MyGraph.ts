@@ -41,7 +41,7 @@ class MyGraph {
     this.initializeGraph();
     this.initializeSimulation();
   }
-  
+
   // send graph data to parent component
   sendGraphData() {
     const graphData = {
@@ -106,8 +106,9 @@ class MyGraph {
       .attr("r", 10)
       .attr("cx", (d) => d.initX ?? 0)
       .attr("cy", (d) => d.initY ?? 0)
-      .style("stroke", "black")
-      .style("fill", "white")
+      .style("stroke", "white")
+      .style("stroke-width", 2)
+      .style("fill", (d) => d.color)
       .on("mouseover", (event, d) => {
         this.updateTooltip(
           true,
@@ -125,10 +126,10 @@ class MyGraph {
           event.pageY - 28
         );
       })
-      .on("mouseout", (event) => {
+      .on("mouseout", (event, d) => {
         this.updateTooltip(false, "", 0, 0);
 
-        d3.select(event.currentTarget).style("fill", "white");
+        d3.select(event.currentTarget).style("fill", d.color);
       });
   }
 
@@ -140,8 +141,8 @@ class MyGraph {
       .attr("y1", (d) => d.sourceNode?.initY ?? 0)
       .attr("x2", (d) => d.targetNode?.initX ?? 0)
       .attr("y2", (d) => d.targetNode?.initY ?? 0)
-      .style("stroke", "grey")
-      .style("stroke-width", 2);
+      .style("stroke", "white")
+      .style("stroke-width", 1);
   }
 }
 

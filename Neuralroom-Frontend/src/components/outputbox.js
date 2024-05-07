@@ -20,7 +20,7 @@ function OutputBox({ modelData, boxSize, shouldRenderModel }) {
               metalness: 0.1,
               roughness: 0.5,
               side: THREE.DoubleSide,
-              color: "#cc7b32",
+              color: "#FFFFFF",
             });
           }
         });
@@ -45,13 +45,13 @@ function OutputBox({ modelData, boxSize, shouldRenderModel }) {
         intensity={Math.PI}
       />
       <pointLight position={[10, 10, 10]} />
-      <fog attach="fog" args={["#cc7b32", 16, 20]} />
+      <fog attach="fog" args={["#FFFFFF", 16, 20]} />
       {modelData && shouldRenderModel && model ? (
         <primitive object={model} scale={scale} />
       ) : (
         <mesh position={[0, 0, 0]}>
           <boxGeometry args={[boxSize.length, boxSize.height, boxSize.width]} />
-          <meshPhongMaterial color="#cc7b32" opacity={0.5} transparent />
+          <meshPhongMaterial color="#FFFFFF" opacity={1} transparent />
         </mesh>
       )}
       <OrbitControls />

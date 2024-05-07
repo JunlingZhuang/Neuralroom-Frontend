@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import MyGraph from "./MyGraph";
 import { setDataInitPos } from "./myutils";
-import * as d3 from "d3";
 
 const GraphComponent = forwardRef(({ parentWidth, parentHeight }, ref) => {
   const myGraphRef = useRef(null);
@@ -83,7 +82,7 @@ const GraphComponent = forwardRef(({ parentWidth, parentHeight }, ref) => {
   return (
     <>
       <svg
-        className="graph-network"
+        className="graph-network  bg-black"
         ref={svgRef}
         width={parentWidth}
         height={parentHeight}
@@ -94,7 +93,7 @@ const GraphComponent = forwardRef(({ parentWidth, parentHeight }, ref) => {
             position: "absolute",
             left: tooltip.x,
             top: tooltip.y,
-            backgroundColor: "lightgray",
+            backgroundColor: "black",
             border: "1px solid",
             padding: "8px",
             pointerEvents: "none",

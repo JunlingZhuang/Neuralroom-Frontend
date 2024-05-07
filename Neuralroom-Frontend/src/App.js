@@ -5,17 +5,14 @@ import Stack from "react-bootstrap/Stack";
 import { Container, Row, Col } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import GraphComponent from "./components/graphnetwork/GraphComponent.jsx";
-import InputBox from "./components/inputbox.js";
 import OutputBox from "./components/outputbox.js";
 import RangeControl from "./components/rangecontrol.js";
 import ResizeObserver from "resize-observer-polyfill";
-import MyButton from "./components/mybutton.tsx";
 
 function App() {
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const containerRef = useRef(null);
   const graphDataRef = useRef(null);
-
 
   // use ResizeObserver to get the size of the container
   useEffect(() => {
@@ -89,17 +86,17 @@ function App() {
   // when range control changes, update boxSize and reset shouldRenderModel to false
   const handleSizeChange = (dimension, newValue) => {
     setBoxSize((prevSize) => ({ ...prevSize, [dimension]: newValue }));
-    setShouldRenderModel(false); 
+    setShouldRenderModel(false);
   };
 
   return (
     <Container fluid className="main-layout">
-      <Row className="layout-row-top">
+      <Row className="layout-row-top bg-black text-white">
         <div class="d-flex justify-content-center">
           <h1>Neural Room</h1>
         </div>
       </Row>
-      <Row className="layout-row-middle">
+      <Row className="layout-row-middle bg-black text-white">
         <Container className="input-output-container">
           <Row>
             <Col className="input-col-left" sm={6} md={6} lg={6} xl={6} xxl={6}>
@@ -109,7 +106,7 @@ function App() {
                 </div> */}
                 <div
                   ref={containerRef}
-                  className="input-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block"
+                  className="input-box-canvas shadow-sm white-border h-75 d-block "
                 >
                   <GraphComponent
                     parentWidth={containerSize.width}
@@ -129,11 +126,11 @@ function App() {
               xxl={6}
             >
               <Stack gap={3}>
-                <div className="output-box-canvas shadow-sm p-2 mb-4 bg-body rounded h-75 d-block">
+                <div className="output-box-canvas shadow-sm white-border h-75 d-block">
                   <OutputBox
                     modelData={shouldRenderModel ? modelData : null}
                     // boxSize={!shouldRenderModel ? boxSize : null} #TODO：check the refreshing of boxSize
-                    boxSize = {boxSize}
+                    boxSize={boxSize}
                     shouldRenderModel={shouldRenderModel}
                   />
                 </div>
@@ -154,13 +151,12 @@ function App() {
                     onChange={(e) => handleSizeChange("width", e.target.value)}
                   />
                   <Button
-                    variant="secondary"
+                    variant="light"
                     size="sm"
                     onClick={handleModelDownload}
                   >
                     Generate
                   </Button>
-                  <MyButton title="I'm a disabled button" disabled={true} />
                 </Stack>
               </Stack>
             </Col>
@@ -168,7 +164,7 @@ function App() {
         </Container>
       </Row>
       <Row className="layout-row-bottom">
-        <div class="d-flex justify-content-center">
+        <div class="d-flex justify-content-center bg-black text-white">
           <h2>bottom</h2>
         </div>
       </Row>

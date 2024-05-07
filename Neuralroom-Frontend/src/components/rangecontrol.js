@@ -6,9 +6,6 @@ import "bootstrap/dist/css/bootstrap.css";
 import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css";
 import RangeSlider from "react-bootstrap-range-slider";
 
-// Assuming your custom CSS is necessary for additional styling
-import "../styles/rangecontrol.css";
-
 function RangeControl({ label, value, onChange }) {
   return (
     <Form>
@@ -17,7 +14,13 @@ function RangeControl({ label, value, onChange }) {
           {label}
         </Form.Label>
         <Col sm="8">
-          <RangeSlider value={value} onChange={onChange} min={0} max={10} />
+          <RangeSlider
+            value={value}
+            onChange={onChange}
+            min={0}
+            max={10}
+            variant="light"
+          />
         </Col>
       </Form.Group>
     </Form>
