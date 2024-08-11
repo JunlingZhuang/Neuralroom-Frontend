@@ -7,8 +7,7 @@ import * as THREE from "three";
 
 function OutputBox({ modelData, boxSize, shouldRenderModel }) {
   const [model, setModel] = useState(null);
-  const [scale, setScale] = useState([1, 1, 1]); // 初始缩放比例为1:1:1
-
+  const [scale, setScale] = useState([1, 1, 1]);
   useEffect(() => {
     if (modelData) {
       try {
